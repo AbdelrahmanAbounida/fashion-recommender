@@ -16,34 +16,34 @@ if options == "Image":
 
         if not openai_key:
             st.error("Please Enter your openaikey")
-
-        if uploaded_img:
-            img = load_image(uploaded_img)
-            if not gender:
-                st.error("Gender shouldn't be none")
-            else:
-                st.image(img)
-                with st.spinner("Processing...."):
-                    cloth_type = CustomFashionClassifier(dataset=dataset).classify(img)
-
-                    try:
-                        recommendations = CustomFashionRecommender(openai_key=openai_key).recommend(cloth_type, gender)
-                    except:
-                        st.error("Please Check your openai key")
-                        recommendations =""
-
-                # print(recommendations.replace('\n','').split(','))
-                st.write(cloth_type)
-                st.write(gender)
-                recommendations = recommendations.replace('\n','').split(',')
-                if '[' in recommendations:
-                    recommendations = recommendations.split('[')[1]
-                if ']' in recommendations:
-                    recommendations = recommendations.split(']')[0]
-
-                st.json(recommendations[0:-2])
         else:
-            st.error("Please Upload an image first")
+            if uploaded_img:
+                img = load_image(uploaded_img)
+                if not gender:
+                    st.error("Gender shouldn't be none")
+                else:
+                    st.image(img)
+                    with st.spinner("Processing...."):
+                        cloth_type = CustomFashionClassifier(dataset=dataset).classify(img)
+
+                        try:
+                            recommendations = CustomFashionRecommender(openai_key=openai_key).recommend(cloth_type, gender)
+                        except:
+                            st.error("Please Check your openai key")
+                            recommendations =""
+
+                    # print(recommendations.replace('\n','').split(','))
+                    st.write(cloth_type)
+                    st.write(gender)
+                    recommendations = recommendations.replace('\n','').split(',')
+                    if '[' in recommendations:
+                        recommendations = recommendations.split('[')[1]
+                    if ']' in recommendations:
+                        recommendations = recommendations.split(']')[0]
+
+                    st.json(recommendations[0:-2])
+            else:
+                st.error("Please Upload an image first")
 
 
 if options == "Camera":
