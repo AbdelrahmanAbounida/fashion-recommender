@@ -1,0 +1,1 @@
+dataset = ["T-shirts","Jeans","Skirts","Sweaters","Pants","Jackets","Shorts","Hoodies","Leggings","Cardigans","button down shirt"]
