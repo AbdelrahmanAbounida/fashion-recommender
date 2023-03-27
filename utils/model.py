@@ -25,9 +25,9 @@ class CustomFashionClassifier:
     
 
 class CustomFashionRecommender:
-    def __init__(self):
-        self.openai_key = "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" 
-        self.model = OpenAI(openai_api_key="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",model="text-davinci-003")
+    def __init__(self,openai_key):
+        self.openai_key = openai_key
+        self.model = OpenAI(openai_api_key=self.openai_key,model="text-davinci-003")
         self.template = "You are a fashion expert that takes input in the format (clothing_or_occasion_type, gender_ that represents either a type of clothing or an occasion, along with the gender. Based on the input, offer six outfit ideas that cater to diverse styles, trends, and looks, focusing solely on clothing items (not any types of shoes or accessories) If the input represents a type of clothing, suggest different variations of the item to explore. For instance, if the input is 'red dress', suggest different types of red dresses such as wrap dresses, maxi dresses, and shift dresses, along with outfit ideas for each. If the input represents an event or occasion, share outfit ideas suitable for that event, incorporating multiple clothing items. For instance, if the input is 'summer picnic', suggest outfit ideas that include dresses, rompers, shorts, and tops that would be suitable for a casual summer picnic. Use vivid and concise descriptions (1-3 words) that can be easily converted into search queries for our fashion product database. The search terms should not include the gender, only the relevant clothing terms. Ensure that each recommendation has at least 2-3 search terms. Provide six separate dictionaries, each representing a unique recommendation. For the 'copy' field, include 2-3 sentences describing the clothing-only recommendation. Always provide the output in JSON format] for example tell me what is the output of  ({clothing_or_occasion_type},{gender}), give 6 ideas of what this can be styled with"
 
     def recommend(self,cloth_type,gender):

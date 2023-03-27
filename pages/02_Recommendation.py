@@ -5,6 +5,7 @@ from utils.model import CustomFashionClassifier, CustomFashionRecommender
 from utils.dataset import dataset
 
 options = option_menu('',["Image", 'Camera', 'Text'], icons=['image', 'camera', 'card-text'],orientation="horizontal")
+openai_key = st.text_input("Write your openaikey")
 
 if options == "Image":
     gender = st.selectbox(
@@ -12,6 +13,10 @@ if options == "Image":
                 ('Male', 'Female'))
     uploaded_img = st.file_uploader("Upload an image")
     if st.button('Submit'):
+
+        if not openai_key:
+            st.error("Please Enter your openaikey")
+
         if uploaded_img:
             img = load_image(uploaded_img)
             if not gender:
@@ -20,7 +25,12 @@ if options == "Image":
                 st.image(img)
                 with st.spinner("Processing...."):
                     cloth_type = CustomFashionClassifier(dataset=dataset).classify(img)
-                    recommendations = CustomFashionRecommender().recommend(cloth_type, gender)
+
+                    try:
+                        recommendations = CustomFashionRecommender(openai_key=openai_key).recommend(cloth_type, gender)
+                    except:
+                        st.error("Please Check your openai key")
+                        recommendations =""
 
                 # print(recommendations.replace('\n','').split(','))
                 st.write(cloth_type)
@@ -32,6 +42,8 @@ if options == "Image":
                     recommendations = recommendations.split(']')[0]
 
                 st.json(recommendations[0:-2])
+        else:
+            st.error("Please Upload an image first")
 
 
 if options == "Camera":
@@ -47,7 +59,12 @@ if options == "Camera":
                 st.image(pic)
                 with st.spinner("Processing...."):
                     cloth_type = CustomFashionClassifier(dataset=dataset).classify(load_image(pic))
-                recommendations = CustomFashionRecommender().recommend(cloth_type, gender)
+                try:
+                    recommendations = CustomFashionRecommender(openai_key=openai_key).recommend(cloth_type, gender)
+                except:
+                    st.error("Please Check your openai key")
+                    recommendations =""
+                
                 st.write(cloth_type)
                 st.write(gender)
                 recommendations = recommendations.replace('\n','').split(',')
@@ -66,10 +83,20 @@ if options == "Text":
     
     if st.button('Submit'):
         if text:
-            if not gender:
-                st.error("Gender shoudn't be none")
-            with st.spinner("Processing...."):
-                recommendations = CustomFashionRecommender().recommend(cloth_type=text, gender=gender)
-            st.write(text)
-            recommendations = recommendations.replace('\n','').split(',')
-            st.json(recommendations)
+            if not openai_key:
+                st.error("Please Enter your openaikey")
+            else:
+                if not gender:
+                    st.error("Gender shoudn't be none")
+                else:
+                    with st.spinner("Processing...."):
+                        try:
+                            recommendations = CustomFashionRecommender(openai_key=openai_key).recommend(cloth_type=text, gender=gender)
+                        except:
+                            st.error("Please Check your openai key")
+                            recommendations =""
+                    st.write(text)
+                    recommendations = recommendations.replace('\n','').split(',')
+                    st.json(recommendations)
+        else:
+            st.error("Cloth type shoudn't be none")
