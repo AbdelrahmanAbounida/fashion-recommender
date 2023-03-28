@@ -16,7 +16,9 @@ if options == "Image":
 
         # Classifiy image here
         with st.spinner("Processing...."):
-            cloth_type = CustomFashionClassifier(dataset=dataset).classify(img)
+            if img:
+                cloth_type = CustomFashionClassifier(dataset=dataset).classify(img)
+            
         st.success(f'This cloth is: {cloth_type}')
 
 if options == "Camera":
