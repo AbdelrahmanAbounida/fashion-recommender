@@ -9,8 +9,5 @@
 $ git clone https://github.com/AbdelrahmanAbounida/fashion-recommender.git
 $ cd fashion-recommender
 $ pip install -r requirements.txt
-$ cd ..
-$ npm run dev
-$ cd backend/
-$ python main.py
+$ streamlit run 01_Home.py
 ~~~
